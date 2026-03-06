@@ -2,6 +2,7 @@ import { NavLink, Route, Routes } from 'react-router-dom';
 import TokenizationPage from './pages/TokenizationPage';
 import ContinuationPage from './pages/ContinuationPage';
 import AttentionPage from './pages/AttentionPage';
+import EmbeddingsPage from './pages/EmbeddingsPage';
 import InstructorPage from './pages/InstructorPage';
 import StudentPage from './pages/StudentPage';
 
@@ -12,6 +13,7 @@ function Navigation() {
       <nav>
         <NavLink to="/">Tokenization</NavLink>
         <NavLink to="/attention">Attention</NavLink>
+        <NavLink to="/embeddings">Embeddings</NavLink>
         <NavLink to="/continuation">Continuation</NavLink>
         <NavLink to="/class/instructor">Classroom</NavLink>
       </nav>
@@ -28,6 +30,7 @@ export default function App() {
           <Route path="/" element={<TokenizationPage />} />
           <Route path="/continuation" element={<ContinuationPage />} />
           <Route path="/attention" element={<AttentionPage />} />
+          <Route path="/embeddings" element={<EmbeddingsPage />} />
           <Route path="/class/instructor" element={<InstructorPage />} />
           <Route path="/class/join/:sessionId" element={<StudentPage />} />
         </Routes>

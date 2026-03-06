@@ -52,6 +52,13 @@ export default function TokenizationPage() {
     <section className="panel">
       <h2>Tokenization</h2>
       <p className="muted">Each tokenized segment is color-highlighted directly in the original text.</p>
+      <div className="micro-explainer">
+        <h4>What is a token?</h4>
+        <p>
+          A token is a small text chunk the model reads, like a word, part of a word, or punctuation.
+          The model does not read full sentences all at once, it reads tokens and builds meaning step by step.
+        </p>
+      </div>
       <label>
         Text for tokenization
         <textarea className="token-text-input" value={text} onChange={(e) => setText(e.target.value)} rows={6} />

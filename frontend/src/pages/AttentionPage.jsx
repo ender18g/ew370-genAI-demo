@@ -150,6 +150,13 @@ export default function AttentionPage() {
     <section className="panel">
       <h2>Attention Visualization</h2>
       <p className="muted">Darker cells mean higher average attention in the model&apos;s last layer.</p>
+      <div className="micro-explainer">
+        <h4>What is attention?</h4>
+        <p>
+          Attention shows which earlier words the model focuses on when it processes the current word.
+          Think of it like highlighting important context, so the model can connect ideas across the sentence.
+        </p>
+      </div>
       <label>
         Prompt
         <textarea value={text} onChange={(e) => setText(e.target.value)} rows={4} />
@@ -251,7 +258,7 @@ export default function AttentionPage() {
           <ul className="link-list">
             {topConnections.map((link, idx) => (
               <li key={`${link.from_index}-${link.to_index}-${idx}`}>
-                {link.from_token} -> {link.to_token}: {link.weight.toFixed(4)}
+                {link.from_token} {'->'} {link.to_token}: {link.weight.toFixed(4)}
               </li>
             ))}
           </ul>

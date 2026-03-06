@@ -43,6 +43,16 @@ export default function ContinuationPage() {
     <section className="panel">
       <h2>Continuation</h2>
       <p className="muted">Use this page to test prompt continuation separate from tokenization.</p>
+      <p className="warning-note">
+        Warning: this can be slow because the model is running locally on a Raspberry Pi CPU.
+      </p>
+      <div className="micro-explainer">
+        <h4>What is continuation?</h4>
+        <p>
+          Continuation is the model predicting what text most likely comes next after your prompt.
+          Higher temperature makes output more creative and surprising, while lower temperature is safer and more predictable.
+        </p>
+      </div>
       <label>
         Prompt
         <textarea value={prompt} onChange={(e) => setPrompt(e.target.value)} rows={5} />

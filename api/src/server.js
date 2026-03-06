@@ -208,6 +208,16 @@ app.post('/api/nlp/next-candidates', async (req, res) => {
   }
 });
 
+app.post('/api/nlp/embeddings', async (req, res) => {
+  try {
+    const result = await axios.post(`${ML_URL}/embeddings`, req.body);
+    res.json(result.data);
+  } catch (error) {
+    const detail = error.response?.data?.detail || error.response?.data?.error || error.message;
+    res.status(500).json({ error: 'Embedding lookup failed', detail });
+  }
+});
+
 app.post('/api/class/session', async (req, res) => {
   const { prompt, candidateCount } = req.body;
   if (!prompt || !prompt.trim()) {

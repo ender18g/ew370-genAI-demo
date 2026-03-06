@@ -94,6 +94,27 @@ input[type='number'] {
   background: #fff;
 }
 
+input:not([type='number']) {
+  width: 100%;
+  margin-top: 0.4rem;
+  border-radius: 10px;
+  border: 1px solid #9db9eb;
+  padding: 0.6rem;
+  font: inherit;
+  background: #fff;
+  color: #0b1a2b;
+}
+
+select {
+  width: 100%;
+  margin-top: 0.4rem;
+  border-radius: 10px;
+  border: 1px solid #9db9eb;
+  padding: 0.6rem;
+  font: inherit;
+  background: #fff;
+}
+
 button {
   border: 1px solid #1d4ed8;
   background: #1d4ed8;
@@ -203,6 +224,35 @@ button:disabled {
 .error {
   color: #b00020;
   font-weight: 600;
+}
+
+.warning-note {
+  margin: 0.6rem 0 0.9rem;
+  padding: 0.55rem 0.7rem;
+  border-radius: 8px;
+  border: 1px solid #fbbf24;
+  background: #fffbeb;
+  color: #92400e;
+  font-weight: 600;
+}
+
+.micro-explainer {
+  margin: 0.6rem 0 0.9rem;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid #bfdbfe;
+  border-radius: 10px;
+  background: #eff6ff;
+}
+
+.micro-explainer h4 {
+  margin: 0 0 0.3rem;
+  color: #1e3a8a;
+}
+
+.micro-explainer p {
+  margin: 0;
+  color: #1f2937;
+  line-height: 1.45;
 }
 
 .heatmap {
@@ -459,4 +509,87 @@ button:disabled {
   .candidate-chip {
     min-height: 96px;
   }
+}
+
+.embeddings-page .muted {
+  color: #475569;
+}
+
+.embeddings-dark {
+  background: #f4f8ff;
+  border: 1px solid #c4d5ef;
+  color: #0b1a2b;
+}
+
+.embeddings-dark textarea,
+.embeddings-dark select {
+  background: #ffffff;
+  color: #0b1a2b;
+  border-color: #9db9eb;
+}
+
+.embeddings-dark input:not([type='number']) {
+  background: #ffffff;
+  color: #0b1a2b;
+  border-color: #9db9eb;
+}
+
+.embeddings-dark button.ghost {
+  color: #1d4ed8;
+  border-color: #1d4ed8;
+}
+
+.neighbor-list {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.pipeline {
+  background: #ffffff;
+  border: 1px solid #9db9eb;
+  border-radius: 8px;
+  padding: 0.6rem;
+  color: #1e3a8a;
+}
+
+.sim-table-wrap {
+  overflow-x: auto;
+}
+
+.sim-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.sim-table th,
+.sim-table td {
+  border-bottom: 1px solid #c4d5ef;
+  text-align: left;
+  padding: 0.55rem 0.45rem;
+}
+
+.sim-table thead th {
+  color: #93c5fd;
+}
+
+.sim-high {
+  color: #34d399;
+  font-weight: 700;
+}
+
+.sim-mid {
+  color: #f59e0b;
+  font-weight: 700;
+}
+
+.sim-low {
+  color: #f87171;
+  font-weight: 700;
+}
+
+.add-words-grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
 }

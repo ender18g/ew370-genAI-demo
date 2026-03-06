@@ -12,6 +12,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 MODEL_NAME = os.getenv("MODEL_NAME", "distilgpt2")
 MAX_SEQ_LEN = int(os.getenv("MAX_SEQ_LEN", "64"))
 TOKENIZE_MAX_SEQ_LEN = int(os.getenv("TOKENIZE_MAX_SEQ_LEN", "512"))
+EMBEDDING_MODEL_NAME = os.getenv("EMBEDDING_MODEL_NAME", "sentence-transformers/all-MiniLM-L6-v2")
 
 app = FastAPI(title="EW370 ML Service", version="0.1.0")
 
@@ -36,6 +37,25 @@ class GenerateRequest(BaseModel):
 class NextRequest(BaseModel):
     text: str = Field(min_length=1, max_length=800)
     k: int = Field(default=5, ge=2, le=50)
+
+
+class EmbeddingRequest(BaseModel):
+    texts: list[str] = Field(min_length=1, max_length=20)
+
+
+embedding_tokenizer = None
+embedding_model = None
+
+
+def get_embedding_components():
+    global embedding_tokenizer, embedding_model
+    if embedding_tokenizer is None or embedding_model is None:
+        embedding_tokenizer = AutoTokenizer.from_pretrained(EMBEDDING_MODEL_NAME)
+        from transformers import AutoModel
+
+        embedding_model = AutoModel.from_pretrained(EMBEDDING_MODEL_NAME)
+        embedding_model.eval()
+    return embedding_tokenizer, embedding_model
 
 
 @app.get("/health")
@@ -123,6 +143,40 @@ def next_candidates(req: NextRequest) -> dict[str, Any]:
         "input_text": req.text,
         "llm_choice": candidates[0]["token"],
         "candidates": candidates,
+    }
+
+
+@app.post("/embeddings")
+def embeddings(req: EmbeddingRequest) -> dict[str, Any]:
+    clean_texts = [text.strip() for text in req.texts if text and text.strip()]
+    if not clean_texts:
+        raise HTTPException(status_code=400, detail="No valid texts provided")
+    if len(clean_texts) > 20:
+        raise HTTPException(status_code=400, detail="Maximum 20 texts allowed")
+
+    embed_tokenizer, embed_model = get_embedding_components()
+    enc = embed_tokenizer(
+        clean_texts,
+        padding=True,
+        truncation=True,
+        max_length=128,
+        return_tensors="pt",
+    )
+
+    with torch.no_grad():
+        outputs = embed_model(**enc)
+
+    token_embeddings = outputs.last_hidden_state
+    attention_mask = enc["attention_mask"].unsqueeze(-1).expand(token_embeddings.size()).float()
+    masked = token_embeddings * attention_mask
+    summed = torch.sum(masked, dim=1)
+    counts = torch.clamp(torch.sum(attention_mask, dim=1), min=1e-9)
+    sentence_embeddings = summed / counts
+    sentence_embeddings = torch.nn.functional.normalize(sentence_embeddings, p=2, dim=1)
+
+    return {
+        "model": EMBEDDING_MODEL_NAME,
+        "vectors": sentence_embeddings.cpu().tolist(),
     }
 
 
