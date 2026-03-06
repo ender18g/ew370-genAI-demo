@@ -1,0 +1,49 @@
+services:
+  ml-service:
+    build:
+      context: ./ml-service
+    container_name: ew370-ml
+    environment:
+      MODEL_NAME: ${MODEL_NAME:-distilgpt2}
+      MAX_SEQ_LEN: ${MAX_SEQ_LEN:-64}
+      TOKENIZE_MAX_SEQ_LEN: ${TOKENIZE_MAX_SEQ_LEN:-512}
+    volumes:
+      - hf_cache:/root/.cache/huggingface
+    expose:
+      - "8001"
+    restart: unless-stopped
+
+  api:
+    build:
+      context: ./api
+    container_name: ew370-api
+    environment:
+      PORT: 8000
+      ML_URL: http://ml-service:8001
+      CLIENT_ORIGIN: ${CLIENT_ORIGIN:-*}
+    depends_on:
+      - ml-service
+    expose:
+      - "8000"
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      target: dev
+    container_name: ew370-web
+    depends_on:
+      - api
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0 --port 5173"
+    environment:
+      VITE_API_PROXY_TARGET: http://api:8000
+    volumes:
+      - ./frontend:/app
+      - frontend_node_modules:/app/node_modules
+    ports:
+      - "${WEB_PORT:-8080}:5173"
+    restart: unless-stopped
+
+volumes:
+  hf_cache:
+  frontend_node_modules:
