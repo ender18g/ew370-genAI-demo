@@ -12,8 +12,8 @@ function Navigation() {
       <h1>USNA EW370 Generative AI</h1>
       <nav>
         <NavLink to="/">Tokenization</NavLink>
-        <NavLink to="/attention">Attention</NavLink>
         <NavLink to="/embeddings">Embeddings</NavLink>
+        <NavLink to="/attention">Attention</NavLink>
         <NavLink to="/continuation">Continuation</NavLink>
         <NavLink to="/class/instructor">Classroom</NavLink>
       </nav>
