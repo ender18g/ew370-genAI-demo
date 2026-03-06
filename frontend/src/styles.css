@@ -441,8 +441,9 @@ button:disabled {
   border-radius: 999px;
   font-weight: 700;
   font-size: 0.95rem;
-  background: #ffffffd9;
-  border: 1px solid #87b59f;
+  color: #1e293b;
+  background: #eef4ff;
+  border: 1px solid #93c5fd;
 }
 
 .student .candidate-button.selected {

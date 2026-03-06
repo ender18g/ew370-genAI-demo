@@ -88,6 +88,23 @@ export default function InstructorPage() {
     }
   }
 
+  async function toggleShuffleOptions() {
+    if (!session) return;
+    setBusy(true);
+    try {
+      const res = await api.post(`/api/class/session/${session.id}/shuffle-mode`, {
+        enabled: !session.shuffleOptions,
+      });
+      setSession(res.data);
+    } catch (err) {
+      const data = err.response?.data;
+      const detail = data?.detail ? `: ${data.detail}` : '';
+      setError(`${data?.error || 'Could not toggle shuffle mode'}${detail}`);
+    } finally {
+      setBusy(false);
+    }
+  }
+
   function renderCurrentText() {
     if (!session) return null;
     const segments = Array.isArray(session.textSegments) ? session.textSegments : [];
@@ -158,6 +175,9 @@ export default function InstructorPage() {
             <div className="button-row">
               <button onClick={() => setShowProbability((value) => !value)} className="ghost">
                 {showProbability ? 'Hide LLM Probability' : 'Show LLM Probability'}
+              </button>
+              <button onClick={toggleShuffleOptions} className="ghost" disabled={busy}>
+                {session.shuffleOptions ? 'Shuffle Options: On' : 'Shuffle Options: Off'}
               </button>
             </div>
 

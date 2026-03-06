@@ -34,7 +34,7 @@ function heatColor(weight, min, max) {
 }
 
 export default function AttentionPage() {
-  const [text, setText] = useState('Students collaborate to choose the next word.');
+  const [text, setText] = useState('The engineer who repaired the drone replaced the battery, and the drone flew again.');
   const [tokens, setTokens] = useState([]);
   const [matrix, setMatrix] = useState([]);
   const [vizMode, setVizMode] = useState('sink-adjusted');

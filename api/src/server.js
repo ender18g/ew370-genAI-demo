@@ -30,6 +30,7 @@ function buildSessionPayload(session) {
     generatedText: session.generatedText,
     round: session.round,
     candidates: session.candidates,
+    shuffleOptions: session.shuffleOptions,
     llmChoice: session.llmChoice,
     votes: session.votes,
     status: session.status,
@@ -97,6 +98,15 @@ function toCandidateWithDisplay(candidate) {
     ...candidate,
     display: buildDisplayToken(candidate.token),
   };
+}
+
+function shuffledCandidates(candidates) {
+  const arr = [...candidates];
+  for (let i = arr.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
 }
 
 async function prepareWordVotingRound(initialText, candidateCount = 5) {
@@ -221,7 +231,8 @@ app.post('/api/class/session', async (req, res) => {
       textSegments: [],
       acceptedSteps: [],
       round: 1,
-      candidates: starter.candidates,
+      candidates: shuffledCandidates(starter.candidates),
+      shuffleOptions: true,
       llmChoice: starter.llmChoice,
       votesByStudent: {},
       votes: {},
@@ -306,7 +317,7 @@ app.post('/api/class/session/:id/accept', async (req, res) => {
     const next = await prepareWordVotingRound(sessionText(session), session.candidateCount || 5);
     session.generatedText += next.autoAppended;
     appendTextSegment(session, next.autoAppended, false);
-    session.candidates = next.candidates;
+    session.candidates = session.shuffleOptions ? shuffledCandidates(next.candidates) : next.candidates;
     session.llmChoice = next.llmChoice;
     session.round += 1;
     session.votesByStudent = {};
@@ -345,7 +356,7 @@ app.post('/api/class/session/:id/reset', async (req, res) => {
     session.textSegments = [];
     session.acceptedSteps = [];
     session.round = 1;
-    session.candidates = starter.candidates;
+    session.candidates = session.shuffleOptions ? shuffledCandidates(starter.candidates) : starter.candidates;
     session.llmChoice = starter.llmChoice;
     session.votesByStudent = {};
     session.votes = {};
@@ -359,6 +370,22 @@ app.post('/api/class/session/:id/reset', async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: 'Could not reset session', detail: error.message });
   }
+});
+
+app.post('/api/class/session/:id/shuffle-mode', (req, res) => {
+  const session = sessions.get(req.params.id);
+  if (!session) {
+    res.status(404).json({ error: 'Session not found' });
+    return;
+  }
+  const enabled = Boolean(req.body?.enabled);
+  session.shuffleOptions = enabled;
+  if (enabled) {
+    session.candidates = shuffledCandidates(session.candidates);
+  }
+  session.updatedAt = new Date().toISOString();
+  io.to(session.id).emit('class:update', buildSessionPayload(session));
+  res.json(buildSessionPayload(session));
 });
 
 server.listen(PORT, () => {

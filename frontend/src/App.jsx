@@ -8,11 +8,11 @@ import StudentPage from './pages/StudentPage';
 function Navigation() {
   return (
     <header className="header">
-      <h1>USNA EW370 Gen AI Demo</h1>
+      <h1>USNA EW370 Generative AI</h1>
       <nav>
         <NavLink to="/">Tokenization</NavLink>
-        <NavLink to="/continuation">Continuation</NavLink>
         <NavLink to="/attention">Attention</NavLink>
+        <NavLink to="/continuation">Continuation</NavLink>
         <NavLink to="/class/instructor">Classroom</NavLink>
       </nav>
     </header>
