@@ -14,8 +14,8 @@ function Navigation() {
         <NavLink to="/">Tokenization</NavLink>
         <NavLink to="/embeddings">Embeddings</NavLink>
         <NavLink to="/attention">Attention</NavLink>
-        <NavLink to="/continuation">Continuation</NavLink>
-        <NavLink to="/class/instructor">Classroom</NavLink>
+        <NavLink to="/continuation">Prediction</NavLink>
+        <NavLink to="/class/instructor">Classroom Prediction Demo</NavLink>
       </nav>
     </header>
   );

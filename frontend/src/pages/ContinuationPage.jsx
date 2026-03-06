@@ -41,13 +41,13 @@ export default function ContinuationPage() {
 
   return (
     <section className="panel">
-      <h2>Continuation</h2>
-      <p className="muted">Use this page to test prompt continuation separate from tokenization.</p>
+      <h2>Prediction</h2>
+      <p className="muted">Use this page to test next-text prediction separate from tokenization.</p>
       <p className="warning-note">
         Warning: this can be slow because the model is running locally on a Raspberry Pi CPU.
       </p>
       <div className="micro-explainer">
-        <h4>What is continuation?</h4>
+        <h4>What is prediction?</h4>
         <p>
           Continuation is the model predicting what text most likely comes next after your prompt.
           Higher temperature makes output more creative and surprising, while lower temperature is safer and more predictable.
